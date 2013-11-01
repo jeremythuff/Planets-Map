@@ -95,7 +95,8 @@ textarea {
 
 canvas { 
     display:block; 
-    background: grey;
+    background: url(../img/bg.jpg);
+    background-size:cover;
 } /* To remove the scrollbars */
 
 
