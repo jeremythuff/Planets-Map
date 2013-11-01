@@ -1,0 +1,73 @@
+{
+        "map": [
+            
+            {
+                "data": "a2",
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0
+                },
+                "planets": {
+                    "1": {
+                        "name": "PlanetOne", 
+                        "x":50,
+                        "y":50         
+                    },
+                    "2": {
+                        "name": "PlanetTwo", 
+                        "x":1500,
+                        "y":1500
+                    },
+                    "3": {
+                        "name": "PlanetThree", 
+                        "x":500,
+                        "y":205,
+                        "basicConnections": [
+                            "7",
+                            "8"
+                        ]
+                    },
+                    "4": {
+                        "name": "PlanetFour", 
+                        "x":1342,
+                        "y":250
+                    },
+                    "5": {
+                        "name": "PlanetFive", 
+                        "x":250,
+                        "y":450
+                    },
+                    "6": {
+                        "name": "PlanetSix", 
+                        "x":1460,
+                        "y":1510
+                    },
+                    "7": {
+                        "name": "PlanetSeven", 
+                        "x":522,
+                        "y":215,
+                        "basicConnections": [
+                            "3",
+                            "8"
+                        ]
+                    },
+                    "8": {
+                        "name": "PlanetEight", 
+                        "x":522,
+                        "y":282,
+                        "basicConnections": [
+                            "7",
+                            "3"
+                        ]
+                    },
+                    "9": {
+                        "name": "PlanetNine", 
+                        "x":1359,
+                        "y":275
+                    }
+                }
+            }
+            
+        ]
+    }
