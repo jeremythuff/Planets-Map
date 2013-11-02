@@ -10,17 +10,23 @@
                 },
                 "planets": {
                     "1": {
-                        "name": "PlanetOne", 
+                        "name": "PlanetOne",
+                        "size": 2.0,
+                        "temp": "70", 
                         "x":50,
                         "y":50         
                     },
                     "2": {
-                        "name": "PlanetTwo", 
+                        "name": "PlanetTwo",
+                        "size": 1.25,
+                        "temp": "70", 
                         "x":1500,
                         "y":1500
                     },
                     "3": {
-                        "name": "PlanetThree", 
+                        "name": "PlanetThree",
+                        "size": 1.8,
+                        "temp": "70", 
                         "x":500,
                         "y":205,
                         "basicConnections": [
@@ -29,22 +35,30 @@
                         ]
                     },
                     "4": {
-                        "name": "PlanetFour", 
+                        "name": "PlanetFour",
+                        "size": 1.75,
+                        "temp": "70", 
                         "x":1342,
                         "y":250
                     },
                     "5": {
-                        "name": "PlanetFive", 
+                        "name": "PlanetFive",
+                        "size": 1.0,
+                        "temp": "70", 
                         "x":250,
                         "y":450
                     },
                     "6": {
-                        "name": "PlanetSix", 
+                        "name": "PlanetSix",
+                        "size": 1.0,
+                        "temp": "70", 
                         "x":1460,
                         "y":1510
                     },
                     "7": {
-                        "name": "PlanetSeven", 
+                        "name": "PlanetSeven",
+                        "size": 1.0,
+                        "temp": "120", 
                         "x":522,
                         "y":215,
                         "basicConnections": [
@@ -53,7 +67,9 @@
                         ]
                     },
                     "8": {
-                        "name": "PlanetEight", 
+                        "name": "PlanetEight",
+                        "size": 1.0,
+                        "temp": "700", 
                         "x":522,
                         "y":282,
                         "basicConnections": [
@@ -62,7 +78,9 @@
                         ]
                     },
                     "9": {
-                        "name": "PlanetNine", 
+                        "name": "PlanetNine",
+                        "size": 1.0,
+                        "temp": "-70", 
                         "x":1359,
                         "y":275
                     }

@@ -65,7 +65,7 @@ $(document).ready(function() {
 
 
         drawBg(x,y,w,h,r,g,b);
-        drawWrap(x,y,w,h,r,g,b);
+        //drawWrap(x,y,w,h,r,g,b);
         drawPlanets(w, planets, oneLightYear);
         // drawShips();
         // drawRoutes();
@@ -197,15 +197,39 @@ $(document).ready(function() {
         });
 
         $(key).each(function() {
-            var planetX = planets[this].x*oneLightYear;
-            var planetY = planets[this].y*oneLightYear;
-            var grd = ctx.createRadialGradient(planetX, planetY, (w/500)/10, planetX, planetY, w/500);
-            
-            grd.addColorStop(0,"white");
-            grd.addColorStop(1,"blue");
-            ctx.fillStyle = grd;
+            var planetX = x + planets[this].x*oneLightYear;
+            var planetY = y + planets[this].y*oneLightYear;
+            var planetSize = planets[this].size;
+            var planetTemp = parseInt(planets[this].temp);
+            var gradient = ctx.createRadialGradient(planetX-((w/500)/10), planetY-((w/500)/10), (w/500)/20, planetX, planetY, w/500);
+            console.log(planetTemp);
+            if(planetTemp>200) {
+                var color1 = 'rgb(230, 240, 20)';
+                var color2 = 'rgb(230, 185, 42)';
+                var color3 = 'rgb(250, 170, 55)';
+            } else if(planetTemp>100&&planetTemp<199) {
+                var color1 = 'rgb(230, 240, 220)';
+                var color2 = 'rgb(230, 185, 242)';
+                var color3 = 'rgb(250, 170, 255)';
+            } else if(planetTemp>32&&planetTemp<99) {
+                var color1 = 'rgb(130, 240, 220)';
+                var color2 = 'rgb(130, 185, 242)';
+                var color3 = 'rgb(50, 170, 255)';
+            } else if(planetTemp<32) {
+                var color1 = 'rgb(30, 40, 20)';
+                var color2 = 'rgb(30, 85, 42)';
+                var color3 = 'rgb(50, 70, 55)';
+            }
+
+
+
+            gradient.addColorStop(0, color1);
+            gradient.addColorStop(0.5, color2);
+            gradient.addColorStop(1, color3);
             ctx.beginPath();
-            ctx.arc(x + planetX, y + planetY, w/500, 0, w/200);
+            ctx.arc(planetX, planetY, w/(500/planetSize), 0, 2 * Math.PI);
+            ctx.closePath();
+            ctx.fillStyle = gradient;
             ctx.fill();
 
         });
