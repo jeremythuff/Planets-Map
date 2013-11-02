@@ -12,9 +12,12 @@
 ///////////////////////////////////////////////////////////////////
 
 $(document).ready(function() {
+    
     ////////////////////
     //Initial Settings//
     ////////////////////
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
     var mapData = {};
     var z = 1;
     var x = (canvas.width/2)-(canvas.height/2);
@@ -34,11 +37,10 @@ $(document).ready(function() {
 
     getImgData.done(function(data) {
         mapData = data.map;
-        canvas = document.getElementById('canvas');
-        ctx = canvas.getContext('2d');
+        
         
         canvas.width = $(window).width();
-        canvas.height = $(window).height();
+        canvas.height = $(window).height()-300;
         
         x = (canvas.width/2)-((canvas.height*z)/2)
         drawStuff(x, y, z);
@@ -65,12 +67,13 @@ $(document).ready(function() {
 
 
         drawBg(x,y,w,h,r,g,b);
-        //drawWrap(x,y,w,h,r,g,b);
         drawPlanets(w, planets, oneLightYear);
         // drawShips();
         // drawRoutes();
         // drawStorms();
+        setWrap(w,h);
         
+
     }
 
     ///////////////////
@@ -78,6 +81,7 @@ $(document).ready(function() {
     ///////////////////
 
     $(window).on('resize', reDrawCanvas);
+
 
     $("canvas").on('mousewheel', function(event) {
         zoom(event.originalEvent.clientX, event.originalEvent.clientY, event.originalEvent.wheelDelta);
@@ -163,16 +167,32 @@ $(document).ready(function() {
         ctx.fillRect (x, y, w, h);
     }
 
-    function drawWrap(x,y,w,h,r,g,b) {
-        ctx.fillStyle = "rgba("+r+", "+g+", "+b+", .25)";
-        ctx.fillRect (x+w, y, w, h);
-        ctx.fillRect (x-w, y, w, h);
-        ctx.fillRect (x, y+w, w, h);
-        ctx.fillRect (x, y-w, w, h);
-        ctx.fillRect (x+w, y+w, w, h);
-        ctx.fillRect (x-w, y-w, w, h);
-        ctx.fillRect (x+w, y-w, w, h);
-        ctx.fillRect (x-w, y+w, w, h);
+    function setWrap(w,h) {
+
+        $(".showWrap").off("click");
+        $(".showWrap").on("click", function() {
+            doWrap(w,h);
+        });
+        function doWrap(w,h) {
+            var mapImg = ctx.getImageData(x, y, w, h);
+            var wrapImgProcessorWorker = new Worker("js/wrapImgProcessor.js");
+            
+            wrapImgProcessorWorker.postMessage(mapImg);       
+            
+            wrapImgProcessorWorker.onmessage = function (oEvent) {
+                var newMapImg = oEvent.data.imgData;
+                console.log(newMapImg);
+                ctx.putImageData(newMapImg, x+w, y);
+                ctx.putImageData(newMapImg, x-w, y);
+                ctx.putImageData(newMapImg, x-w, y-h);
+                ctx.putImageData(newMapImg, x+w, y+h);
+                ctx.putImageData(newMapImg, x, y+h);
+                ctx.putImageData(newMapImg, x, y-h);
+                ctx.putImageData(newMapImg, x+w, y-h);
+                ctx.putImageData(newMapImg, x-w, y+h);
+            };    
+        }
+        
     }
 
     function drawPlanets(w, planets, oneLightYear) {
@@ -184,12 +204,15 @@ $(document).ready(function() {
             var planetY = planets[this].y*oneLightYear;
             var basicConnections = planets[this].basicConnections;
             
+            ctx.lineWidth=.05;
+            ctx.strokeStyle = '#eee';
+            
             $(basicConnections).each(function() {
                 var conX = planets[this].x*oneLightYear;;
                 var conY = planets[this].y*oneLightYear;;
                 ctx.moveTo(x+planetX,y+planetY);
                 ctx.lineTo(x+conX,y+conY);
-                ctx.strokeStyle = '#ff0000';
+
                 ctx.stroke();
 
             });
@@ -199,29 +222,28 @@ $(document).ready(function() {
         $(key).each(function() {
             var planetX = x + planets[this].x*oneLightYear;
             var planetY = y + planets[this].y*oneLightYear;
+            var planetName = planets[this].name;
             var planetSize = planets[this].size;
             var planetTemp = parseInt(planets[this].temp);
-            var gradient = ctx.createRadialGradient(planetX-((w/500)/10), planetY-((w/500)/10), (w/500)/20, planetX, planetY, w/500);
-            console.log(planetTemp);
+            var gradient = ctx.createRadialGradient(planetX-((w/500)/10), planetY-((w/500)/10), (w/500)/30, planetX, planetY, w/500);
+
             if(planetTemp>200) {
-                var color1 = 'rgb(230, 240, 20)';
-                var color2 = 'rgb(230, 185, 42)';
-                var color3 = 'rgb(250, 170, 55)';
+                var color1 = 'rgb(250, 135, 170)';
+                var color2 = 'rgb(230, 40, 40)';
+                var color3 = 'rgb(190, 60, 60)';
             } else if(planetTemp>100&&planetTemp<199) {
-                var color1 = 'rgb(230, 240, 220)';
-                var color2 = 'rgb(230, 185, 242)';
-                var color3 = 'rgb(250, 170, 255)';
+                var color1 = 'rgb(220, 200, 144)';
+                var color2 = 'rgb(230, 160, 12)';
+                var color3 = 'rgb(220, 200, 100)';
             } else if(planetTemp>32&&planetTemp<99) {
-                var color1 = 'rgb(130, 240, 220)';
-                var color2 = 'rgb(130, 185, 242)';
-                var color3 = 'rgb(50, 170, 255)';
+                var color1 = 'rgb(150, 180, 150)';
+                var color2 = 'rgb(60, 150, 70)';
+                var color3 = 'rgb(45, 130, 45)';
             } else if(planetTemp<32) {
-                var color1 = 'rgb(30, 40, 20)';
-                var color2 = 'rgb(30, 85, 42)';
-                var color3 = 'rgb(50, 70, 55)';
+                var color1 = 'rgb(235, 235, 235)';
+                var color2 = 'rgb(170, 220, 230)';
+                var color3 = 'rgb(200, 200, 200)';
             }
-
-
 
             gradient.addColorStop(0, color1);
             gradient.addColorStop(0.5, color2);
@@ -232,13 +254,17 @@ $(document).ready(function() {
             ctx.fillStyle = gradient;
             ctx.fill();
 
+            ctx.font = ((z*3)*(planetSize))+'pt Calibri';
+            ctx.fillStyle = 'blue';
+            ctx.fillText(planetName, planetX, planetY-((w/(500/planetSize))+10));
+
         });
 
     }
 
     function reDrawCanvas() {
         canvas.width = $(window).width();
-        canvas.height = $(window).height();
+        canvas.height = $(window).height()-300;
         drawStuff(x, y, z); 
     }
 

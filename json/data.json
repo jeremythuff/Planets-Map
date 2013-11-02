@@ -12,7 +12,7 @@
                     "1": {
                         "name": "PlanetOne",
                         "size": 2.0,
-                        "temp": "70", 
+                        "temp": "500", 
                         "x":50,
                         "y":50         
                     },
@@ -26,7 +26,7 @@
                     "3": {
                         "name": "PlanetThree",
                         "size": 1.8,
-                        "temp": "70", 
+                        "temp": "150", 
                         "x":500,
                         "y":205,
                         "basicConnections": [
@@ -43,8 +43,8 @@
                     },
                     "5": {
                         "name": "PlanetFive",
-                        "size": 1.0,
-                        "temp": "70", 
+                        "size": 2.0,
+                        "temp": "-70", 
                         "x":250,
                         "y":450
                     },
