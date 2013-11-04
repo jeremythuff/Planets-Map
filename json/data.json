@@ -19,14 +19,14 @@
                     "2": {
                         "name": "PlanetTwo",
                         "size": 1.25,
-                        "temp": "70", 
+                        "temp": "700", 
                         "x":1500,
                         "y":1500
                     },
                     "3": {
                         "name": "PlanetThree",
                         "size": 1.8,
-                        "temp": "150", 
+                        "temp": "50", 
                         "x":500,
                         "y":205,
                         "basicConnections": [

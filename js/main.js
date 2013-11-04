@@ -1,16 +1,3 @@
-///////////////////////////////////////////////////////////////////
-//TODOS                                                          //
-///////////////////////////////////////////////////////////////////
-//1. "Smart" buffer next and prev images to an off screen canvas.//
-///////////////////////////////////////////////////////////////////
-//2. handle images as dzi if they have the data format           //
-///////////////////////////////////////////////////////////////////
-//3. Integrate into a backend that prepares and serves the data  //
-///////////////////////////////////////////////////////////////////
-//4. Make the zoom level of the image be a product of the images'//
-//   size relative to the whole of the image                     //
-///////////////////////////////////////////////////////////////////
-
 $(document).ready(function() {
     
     ////////////////////
@@ -67,6 +54,7 @@ $(document).ready(function() {
 
 
         drawBg(x,y,w,h,r,g,b);
+        drawGrid(x,y,w,h, oneLightYear);
         drawPlanets(w, planets, oneLightYear);
         // drawShips();
         // drawRoutes();
@@ -119,33 +107,28 @@ $(document).ready(function() {
             var newY = e.clientY;            
 
             if(lastX > newX) {
-                x -= Math.abs(lastX - newX);
-
-                if((x<=0)&&(x+(((canvas.height)*z))<=canvas.width)) {
-                    x += Math.abs(lastX - newX);
-                }
+                
+                ((x+((canvas.height)*z))<0)?(x += Math.abs(lastX - newX)):(x -= Math.abs(lastX - newX));
 
             } else {
-                x += Math.abs(lastX - newX);
+                
+                (x>(canvas.width))?(x -= Math.abs(lastX - newX)):(x += Math.abs(lastX - newX));
 
-                if((x+(((canvas.height)*z))>=canvas.width)&&(x>=0)) {
-                    x -= Math.abs(lastX - newX);
-                }
             }
 
             if(newY > lastY) {
                 y += Math.abs(lastY - newY);
 
-                if((y+(((canvas.height)*z))>=canvas.height)&&(y>=0)) {
-                    y -= Math.abs(lastY - newY);
-                }
+                // if((y+(((canvas.height)*z))>=canvas.height)&&(y>=0)) {
+                //     y -= Math.abs(lastY - newY);
+                // }
 
             } else {
                 y -= Math.abs(lastY - newY);
 
-                if((y<=0)&&((y+(((canvas.height)*z)))<=(canvas.height))) {
-                    y += Math.abs(lastY - newY);
-                } 
+                // if((y<=0)&&((y+(((canvas.height)*z)))<=(canvas.height))) {
+                //     y += Math.abs(lastY - newY);
+                // } 
             }
             lastX = newX;
             lastY = newY; 
@@ -165,6 +148,33 @@ $(document).ready(function() {
     function drawBg(x,y,w,h,r,g,b) {
         ctx.fillStyle = "rgba("+r+", "+g+", "+b+", .75)";
         ctx.fillRect (x, y, w, h);
+    }
+
+     function drawGrid(x,y,w,h, oneLightYear) {
+        var gridX = x;
+        var gridY = y;
+        var oneHundredLY = oneLightYear*100;
+        var LYcounter = 0;
+        for(i=0;i<=(oneLightYear*2000);i+=oneHundredLY) {
+            ctx.fillStyle = "#fff"
+            ctx.font = z*10+'pt Calibri';
+            ctx.fillText(LYcounter, gridX, gridY+h+15);
+            ctx.moveTo(gridX,gridY);
+            ctx.lineTo(gridX,gridY+h);
+            gridX+=oneHundredLY;    
+            LYcounter+=100;
+        }
+
+        gridX=x;
+
+        for(i=0;i<=(oneLightYear*2000);i+=oneHundredLY) {
+            ctx.moveTo(gridX,gridY);
+            ctx.lineTo(gridX+w,gridY);
+            gridY+=oneHundredLY;    
+        }
+        
+        gridY=y;
+    
     }
 
     function setWrap(w,h) {
@@ -205,7 +215,7 @@ $(document).ready(function() {
             var basicConnections = planets[this].basicConnections;
             
             ctx.lineWidth=.05;
-            ctx.strokeStyle = '#eee';
+            ctx.strokeStyle = '#f90';
             
             $(basicConnections).each(function() {
                 var conX = planets[this].x*oneLightYear;;
@@ -300,7 +310,7 @@ $(document).ready(function() {
         z += Math.abs(delta)*delta*(z/150000);
         //this places a min/max zoom in/out level
         z<.5 ? z=.5: z=z;
-        z>5 ? z=5: z=z;
+        z>50 ? z=50: z=z;
 
         //this recalculates the cursors position as a % of the total images size at the new level of zoom
         var newMouseXPosPercentOfImg = mouseXOnImg/(canvas.height*z);
