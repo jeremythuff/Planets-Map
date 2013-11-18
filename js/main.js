@@ -155,9 +155,14 @@ $(document).ready(function() {
         var gridY = y;
         var oneHundredLY = oneLightYear*100;
         var LYcounter = 0;
+        
+        ctx.lineWidth=.25;
+        ctx.fillStyle = "#fff"
+        ctx.strokeStyle = "#fff"
+        ctx.font = z*10+'pt Calibri';
+        ctx.beginPath();
         for(i=0;i<=(oneLightYear*2000);i+=oneHundredLY) {
-            ctx.fillStyle = "#fff"
-            ctx.font = z*10+'pt Calibri';
+            
             ctx.fillText(LYcounter, gridX, gridY+h+15);
             ctx.moveTo(gridX,gridY);
             ctx.lineTo(gridX,gridY+h);
@@ -172,7 +177,8 @@ $(document).ready(function() {
             ctx.lineTo(gridX+w,gridY);
             gridY+=oneHundredLY;    
         }
-        
+        ctx.stroke();
+        ctx.closePath();
         gridY=y;
     
     }
@@ -214,18 +220,20 @@ $(document).ready(function() {
             var planetY = planets[this].y*oneLightYear;
             var basicConnections = planets[this].basicConnections;
             
-            ctx.lineWidth=.05;
+            ctx.lineWidth=.25;
             ctx.strokeStyle = '#f90';
-            
+            ctx.beginPath();
+
             $(basicConnections).each(function() {
                 var conX = planets[this].x*oneLightYear;;
                 var conY = planets[this].y*oneLightYear;;
                 ctx.moveTo(x+planetX,y+planetY);
+                ctx.beginPath;
                 ctx.lineTo(x+conX,y+conY);
 
-                ctx.stroke();
-
             });
+            ctx.stroke();
+            ctx.closePath();
             
         });
 
@@ -259,14 +267,14 @@ $(document).ready(function() {
             gradient.addColorStop(0.5, color2);
             gradient.addColorStop(1, color3);
             ctx.beginPath();
-            ctx.arc(planetX, planetY, w/(500/planetSize), 0, 2 * Math.PI);
+            ctx.arc(planetX, planetY, w/(500/(planetSize*2)), 0, 2 * Math.PI);
             ctx.closePath();
             ctx.fillStyle = gradient;
             ctx.fill();
 
-            ctx.font = ((z*3)*(planetSize))+'pt Calibri';
-            ctx.fillStyle = 'blue';
-            ctx.fillText(planetName, planetX, planetY-((w/(500/planetSize))+10));
+            ctx.font = (((w/z)/100)*(planetSize))+'pt Calibri';
+            ctx.fillStyle = 'lightblue';
+            ctx.fillText(planetName, planetX+z, planetY-((w/(500/(planetSize)))+10));
 
         });
 
@@ -312,7 +320,7 @@ $(document).ready(function() {
         z<.5 ? z=.5: z=z;
         z>50 ? z=50: z=z;
 
-        //this recalculates the cursors position as a % of the total images size at the new level of zoom
+        //this recalculates the images position under the cursors as a % of the total images size at the new level of zoom
         var newMouseXPosPercentOfImg = mouseXOnImg/(canvas.height*z);
         var newMouseYPosPercentOfImg = mouseYOnImg/(canvas.height*z);
 
